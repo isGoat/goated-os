@@ -1,0 +1,2 @@
+-- GOATED.OS 6.1 schema — already provided in chat.
+-- Use the SQL from ETAPA 2 in Supabase SQL Editor.
