@@ -17,7 +17,7 @@ function pick(payload: any, keys: string[]) {
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: true, system: 'GOATED.OS 6.2', endpoint: 'Droper webhook' });
+  return NextResponse.json({ ok: true, system: 'GOATED.OS 6.3', endpoint: 'Droper webhook' });
 }
 
 export async function POST(req: NextRequest) {
