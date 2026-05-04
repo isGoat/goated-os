@@ -1,18 +1,19 @@
-# GOATED.OS 6.1
+# GOATED.OS 6.2 — Operação Real
 
-Stack: Next.js + Supabase + Vercel.
+Upgrade com melhorias de sistema:
 
-## Environment Variables
+- Dashboard com KPIs completos
+- Estoque com filtros e busca
+- Nova compra com custo total, frete, custo extra, margem e ROI
+- Venda com taxa por canal, desconto, frete loja, status de pedido e recebimento
+- Recebimentos com filtros de atrasados e próximos 7 dias
+- DRE simplificada
+- BuyLab com decisão Comprar / Negociar / Evitar
+- Insumos com custo unitário e alerta de reposição
+- Webhook Droper com copiar URL, teste e transformação manual em venda
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://eqlhzufgsustlfmywzuv.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=COLE_AQUI_SUA_ANON_PUBLIC_KEY
-SUPABASE_SERVICE_ROLE_KEY=COLE_AQUI_SUA_SERVICE_ROLE_KEY
-DROPER_WEBHOOK_TOKEN=goated-droper-2026
-```
+## Ordem correta
 
-## Droper Webhook
-
-```text
-https://SEU_DOMINIO_VERCEL/api/webhooks/droper?token=goated-droper-2026
-```
+1. Rode `supabase/migration-6.2.sql` no Supabase SQL Editor.
+2. Suba os arquivos no GitHub.
+3. A Vercel vai fazer redeploy automaticamente.

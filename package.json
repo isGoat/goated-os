@@ -1,6 +1,6 @@
 {
-  "name": "goated-os-6-1",
-  "version": "6.1.0",
+  "name": "goated-os-6-2",
+  "version": "6.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
