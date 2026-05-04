@@ -1,12 +1,14 @@
-# GOATED.OS 6.3 — Ajustes Operacionais
+# GOATED.OS 6.4 — Fluxos + Marketing
 
-Versão baseada no feedback de uso real.
+Sistema dividido em Fluxo, Estoque, Financeiro, Gestão e Marketing.
 
-## Implementado
+## Marketing
+- Criar roteiros para Reels, TikTok, Post, Stories e Carrossel.
+- Salvar links de referência, gancho, roteiro, legenda e hashtags.
+- Marcar conteúdo como postado informando link e data.
+- Após 7 dias, o conteúdo aparece em análise para registrar resultado.
 
-- Dashboard com gráficos internos: estoque por numeração, receita por canal e status dos itens.
-- Nova compra simplificada: marca, modelo/colorway, tamanho 36-45, SKU, canal OLX/Droper/Enjoei, custo total pago, preço mínimo/alvo/ideal, lucro potencial e link do anúncio.
-- Estoque com filtro de itens em trânsito.
-- Venda simplificada: item, canal WhatsApp/Droper/Instagram, valor bruto, taxa Droper 14%, valor líquido, cliente e WhatsApp.
-- BuyLab simplificado sem frete e sem taxa estimada.
-- Webhook: botão de teste não gera venda real; teste fica marcado como `teste`.
+## Instalação
+1. Rode `supabase/migration-6.4-marketing.sql` no Supabase.
+2. Suba os arquivos no GitHub.
+3. Aguarde o deploy na Vercel.
