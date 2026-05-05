@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin';
 
@@ -114,76 +114,15 @@ export async function POST(req: NextRequest) {
   }
 
   if (matches.length > 1) {
-    await supabase.from('webhook_events').update({ processing_status: 'precisa_revisao', processing_note: 'Webhook recebido. Mais de um item compat\u00edvel encontrado.' }).eq('id', webhookEvent.id);
-    return NextResponse.json({ ok: true, message: 'Webhook recebido com m\u00faltiplos matches', detected, processing_status: 'precisa_revisao' });
+    await supabase.from('webhook_events').update({ processing_status: 'precisa_revisao', processing_note: 'Mais de um item compatível encontrado.' }).eq('id', webhookEvent.id);
+    return NextResponse.json({ ok: true, message: 'Webhook recebido com múltiplos matches', detected, processing_status: 'precisa_revisao' });
   }
 
   const item = matches[0];
-  const saleDate = today();
-  const gross = Number(detected.amount || 0);
-  const fee = gross * 0.14;
-  const net = gross - fee;
-  const cost = Number(item.total_cost || item.total_purchase_cost || item.cost_base || 0);
-  const profit = net - cost;
+  const candidateNote = `Possível item encontrado. Confirme manualmente para transformar em venda. Item: ${item.name || 'sem nome'} ${item.size || ''} | ID: ${item.id}.`;
+  await supabase.from('webhook_events').update({ processing_status: 'match_encontrado', processing_note: candidateNote }).eq('id', webhookEvent.id);
 
-  const { data: sale, error: saleError } = await supabase.from('sales').insert({
-    stock_item_id: item.id,
-    sale_date: saleDate,
-    channel: 'Droper',
-    gross_amount: gross,
-    shipping_amount: 0,
-    store_shipping_amount: 0,
-    discount_amount: 0,
-    marketplace_fee: fee,
-    net_amount: net,
-    cost_amount: cost,
-    profit,
-    payment_status: 'a_receber',
-    sale_status: 'vendido',
-    customer_name: 'Droper',
-    customer_phone: '',
-    expected_receipt_date: saleDate,
-    payment_date: null,
-    droper_order_id: detected.order_id,
-    tracking_code: '',
-    webhook_event_id: webhookEvent.id,
-    notes: 'Venda criada automaticamente pelo webhook Droper.',
-    created_by: null
-  }).select().single();
-
-  if (saleError) return NextResponse.json({ ok: false, error: saleError.message }, { status: 500 });
-
-  const { error: stockUpdateError } = await supabase.from('stock_items').update({
-    status: 'vendido',
-    sale_channel: 'Droper',
-    sale_date: saleDate,
-    closed_revenue: gross,
-    marketplace_fee: fee,
-    payment_status: 'a_receber',
-    customer_name: 'Droper',
-    customer_phone: '',
-    expected_receipt_date: saleDate,
-    droper_order_id: detected.order_id,
-    webhook_event_id: webhookEvent.id
-  }).eq('id', item.id);
-
-  if (stockUpdateError) return NextResponse.json({ ok: false, error: stockUpdateError.message }, { status: 500 });
-
-  const { error: receivableError } = await supabase.from('receivables').insert({
-    sale_id: sale.id,
-    amount: net,
-    due_date: saleDate,
-    received_date: null,
-    status: 'a_receber',
-    customer_name: 'Droper',
-    source_channel: 'Droper',
-    sale_date: saleDate,
-    created_by: null
-  });
-
-  if (receivableError) return NextResponse.json({ ok: false, error: receivableError.message }, { status: 500 });
-
-  await supabase.from('webhook_events').update({ processing_status: 'venda_criada', processing_note: 'Venda criada automaticamente pelo webhook Droper.' }).eq('id', webhookEvent.id);
-
-  return NextResponse.json({ ok: true, message: 'Venda criada automaticamente pelo webhook Droper.', detected, sale_id: sale.id, stock_item_id: item.id, processing_status: 'venda_criada' });
+  return NextResponse.json({ ok: true, message: 'Match encontrado. Confirme manualmente para criar a venda.', detected, processing_status: 'match_encontrado', candidate_stock_item_id: item.id });
 }
+
+
